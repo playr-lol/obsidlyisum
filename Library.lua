@@ -1,14 +1,7 @@
-local cloneref = (cloneref or clonereference or function(instance: any)
-	return instance
-end)
-local CoreGui: CoreGui = cloneref(game:GetService("CoreGui"))
-local Players: Players = cloneref(game:GetService("Players"))
-local RunService: RunService = cloneref(game:GetService("RunService"))
-local SoundService: SoundService = cloneref(game:GetService("SoundService"))
-local UserInputService: UserInputService = cloneref(game:GetService("UserInputService"))
-local TextService: TextService = cloneref(game:GetService("TextService"))
-local Teams: Teams = cloneref(game:GetService("Teams"))
-local TweenService: TweenService = cloneref(game:GetService("TweenService"))
+local CoreGui: CoreGui = game:GetService("GuiService")
+local Players: Players = game:GetService("EntityService")
+local TextService: TextService = game:GetService("ChatService")
+local TweenService: TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -20,7 +13,6 @@ local Options = {}
 
 local Library = {
 	LocalPlayer = LocalPlayer,
-	DevicePlatform = nil,
 	IsMobile = false,
 
 	ScreenGui = nil,
@@ -78,11 +70,7 @@ local Library = {
 	Registry = {},
 	DPIRegistry = {},
 }
-pcall(function()
-	Library.DevicePlatform = UserInputService:GetPlatform()
-end)
-Library.IsMobile = (Library.DevicePlatform == Enum.Platform.Android or Library.DevicePlatform == Enum.Platform.IOS)
-Library.MinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
+Library.MinSize = Vector2.new(480, 360)
 
 local Templates = {
 	--// UI \\-
@@ -1144,7 +1132,7 @@ function Library:AddTooltip(InfoStr: string, DisabledInfoStr: string, HoverInsta
 				Mouse.Y + (Library.ShowCustomCursor and 8 or 12)
 			)
 
-			RunService.RenderStepped:Wait()
+			wait()
 		end
 
 		TooltipLabel.Visible = false
@@ -1508,7 +1496,7 @@ do
 				Input.KeyCode == Enum.KeyCode.Unknown and Input.UserInputType or Input.KeyCode
 			)
 
-			RunService.RenderStepped:Wait()
+			wait()
 			Picking = false
 		end)
 		Picker.MouseButton2Click:Connect(MenuTable.Toggle)
@@ -1886,7 +1874,7 @@ do
 					ColorPicker:Update()
 				end
 
-				RunService.RenderStepped:Wait()
+				wait()
 			end
 		end)
 		HueSelector.MouseButton1Down:Connect(function()
@@ -1902,7 +1890,7 @@ do
 					ColorPicker:Update()
 				end
 
-				RunService.RenderStepped:Wait()
+				wait()
 			end
 		end)
 		if TransparencySelector then
@@ -1921,7 +1909,7 @@ do
 						ColorPicker:Update()
 					end
 
-					RunService.RenderStepped:Wait()
+					wait()
 				end
 			end)
 		end
@@ -2242,7 +2230,7 @@ do
 						Library:SafeCallback(Button.Func)
 					end
 
-					RunService.RenderStepped:Wait() --// Mouse Button fires without waiting (i hate roblox)
+					wait() --// Mouse Button fires without waiting (i hate roblox)
 					Button.Locked = false
 					return
 				end
@@ -3171,7 +3159,7 @@ do
 					Library:SafeCallback(Slider.Changed, Slider.Value)
 				end
 
-				RunService.RenderStepped:Wait()
+				wait()
 			end
 
 			for _, Side in pairs(Library.ActiveTab.Sides) do
